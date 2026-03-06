@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<!-- 
+  DOCTYPE html = dit au navigateur "ce fichier est une page web moderne"
+-->
+<html lang="fr">
+<!-- 
+  <html> = la balise racine, tout le site est à l'intérieur
+  lang="fr" = indique que la langue est le français (utile pour l'accessibilité)
+-->
+
+<head>
+  <!-- 
+    <head> = la "tête" invisible de la page.
+    Elle contient des infos POUR le navigateur, pas pour l'utilisateur.
+  -->
+
+  <meta charset="UTF-8">
+  <!-- charset="UTF-8" = permet d'afficher les accents (é, è, à...) -->
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- viewport = rend le site responsive (adapté aux mobiles) -->
+
+  <title>Portfolio — Dev</title>
+  <!-- Le texte qui apparaît dans l'onglet du navigateur -->
+
+  <!-- 
+    Google Fonts = on importe 2 polices depuis internet :
+    - "Bebas Neue" → police TRÈS ÉPAISSE pour les grands titres
+    - "DM Sans" → police fine et élégante pour le texte normal
+  -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@200;300;400&display=swap" rel="stylesheet">
+
+  <style>
+    
+
+    /* 
+      :root = les "variables globales" du site.
+      On définit les couleurs ici pour pouvoir les réutiliser partout.
+      Si on veut changer une couleur, on la change UNE SEULE FOIS ici.
+    */
+    :root {
+      --noir: #080808;        /* fond principal ultra sombre */
+      --noir2: #323232;       /* fond des cartes, légèrement moins sombre */
+      --blanc: #f0ede8;       /* blanc cassé/crème pour le texte principal */
+      --accent: #e8ff00;      /* jaune électrique pour les accents */
+      --gris: #a5a5a5;        /* gris pour le texte secondaire */
+      --bordure: #222222;     /* couleur des bordures */
+
+      --font-titre: 'Bebas Neue', sans-serif;   /* police grasse pour les titres */
+      --font-texte: 'DM Sans', sans-serif;       /* police fine pour le texte */
+    }
+
+    /* 
+      * = sélectionne TOUS les éléments de la page.
+      box-sizing: border-box → simplifie le calcul des tailles
+      margin/padding: 0 → supprime les espacements par défaut du navigateur
+    */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    /* 
+      html { scroll-behavior: smooth } = quand on clique sur un lien (#contact etc.),
+      la page défile doucement au lieu de sauter brutalement
+    */
+    html {
+      scroll-behavior: smooth;
+    }
+
+    /* 
+      body = le corps entier de la page.
+      On applique ici la couleur de fond, la police par défaut, la couleur du texte.
+    */
+    body {
+      background-color: var(--noir);   /* fond noir */
+      color: var(--blanc);              /* texte blanc cassé */
+      font-family: var(--font-texte);   /* police fine par défaut */
+      font-weight: 300;                 /* épaisseur fine (300 = light) */
+      overflow-x: hidden;              /* empêche le scroll horizontal involontaire */
+      cursor: crosshair;               /* curseur en croix pour le style */
+    }
+
+    /* ========== BARRE DE NAVIGATION ========== */
+    nav {
+      /* 
+        position: fixed = la nav reste EN HAUT même quand on scrolle
+        top/left/right: 0 = collée aux bords
+        z-index: 100 = au-dessus de tout le reste (z-index = "couche")
+      */
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      display: flex;                    /* aligne les éléments en ligne */
+      justify-content: space-between;  /* logo à gauche, liens à droite */
+      align-items: center;             /* centré verticalement */
+      padding: 1.5rem 4rem;
+      border-bottom: 1px solid var(--bordure);
+      background: rgba(8, 8, 8, 0.92); /* fond semi-transparent */
+      backdrop-filter: blur(12px);     /* flou derrière la nav (effet verre) */
+    }
+
+    .nav-logo {
+      font-family: var(--font-titre);  /* police grasse pour le logo */
+      font-size: 1.4rem;
+      letter-spacing: 0.1em;          /* espace entre les lettres */
+      color: var(--accent);
+    }
+
+    .nav-links {
+      /* 
+        display: flex = aligne les liens en ligne
+        list-style: none = supprime les puces de liste
+      */
+      display: flex;
+      list-style: none;
+      gap: 2.5rem;                     /* espace entre chaque lien */
+    }
+
+    .nav-links a {
+      color: var(--gris);
+      text-decoration: none;           /* supprime le soulignement */
+      font-size: 0.75rem;
+      font-weight: 300;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;       /* met en MAJUSCULES automatiquement */
+      transition: color 0.3s;          /* la couleur change en 0.3 secondes au survol */
+    }
+
+    .nav-links a:hover {
+      /* :hover = style appliqué quand la souris passe dessus */
+      color: var(--accent);
+    }
+
+    /* ========== SECTION HERO (accueil) ========== */
+    #hero {
+      /* 
+        min-height: 100vh = la section fait AU MOINS toute la hauteur de l'écran
+        100vh = 100% de la hauteur visible (vh = viewport height)
+      */
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;          /* empile les éléments verticalement */
+      justify-content: flex-end;       /* pousse le contenu en bas */
+      padding: 0 4rem 5rem;
+      position: relative;
+      border-bottom: 1px solid var(--bordure);
+      overflow: hidden;
+    }
+
+    /* Le grand numéro décoratif en arrière-plan */
+    .hero-bg-text {
+      position: absolute;              /* positionné librement dans le hero */
+      top: -2rem;
+      right: -2rem;
+      font-family: var(--font-titre);
+      font-size: 40vw;                 /* 40% de la largeur de l'écran = ÉNORME */
+      color: transparent;
+      /* -webkit-text-stroke = contour du texte sans remplissage */
+      -webkit-text-stroke: 1px rgba(255,255,255,0.04);
+      line-height: 1;
+      user-select: none;               /* on ne peut pas sélectionner ce texte */
+      pointer-events: none;            /* les clics passent à travers */
+    }
+
+    .hero-tag {
+      font-size: 0.7rem;
+      font-weight: 300;
+      letter-spacing: 0.3em;
+      color: var(--accent);
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-title {
+      font-family: var(--font-titre);  /* police TRÈS GRASSE */
+      font-size: clamp(4rem, 12vw, 14rem); 
+      /* 
+        clamp(min, préféré, max) = 
+        taille préférée = 12vw (12% de la largeur d'écran),
+        mais jamais moins de 4rem, jamais plus de 14rem.
+        → S'adapte automatiquement à la taille de l'écran !
+      */
+      line-height: 0.9;
+      letter-spacing: -0.02em;
+      color: var(--blanc);
+      margin-bottom: 2rem;
+    }
+
+    /* Le point jaune dans le titre */
+    .hero-title span {
+      color: var(--accent);
+    }
+
+    .hero-subtitle {
+      font-size: 1rem;
+      font-weight: 200;                /* ultra fin */
+      color: var(--gris);
+      max-width: 400px;
+      line-height: 1.7;               /* hauteur de ligne (espace entre les lignes) */
+      margin-bottom: 3rem;
+    }
+
+    .hero-cta {
+      /* Le bouton d'appel à l'action */
+      display: inline-flex;
+      align-items: center;
+      gap: 1rem;
+      background: var(--accent);
+      color: var(--noir);
+      padding: 1rem 2.5rem;
+      font-family: var(--font-texte);
+      font-size: 0.75rem;
+      font-weight: 400;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: all 0.3s;
+    }
+
+    .hero-cta:hover {
+      background: var(--blanc);
+      transform: translateX(6px);      /* se déplace légèrement à droite */
+    }
+
+    /* La flèche → dans le bouton */
+    .hero-cta::after {
+      /* ::after = crée un élément fictif APRÈS le contenu du bouton */
+      content: '→';
+      transition: transform 0.3s;
+    }
+
+    .hero-cta:hover::after {
+      transform: translateX(4px);      /* la flèche avance au survol */
+    }
+
+    /* ========== SECTIONS GÉNÉRIQUES ========== */
+    section {
+      padding: 8rem 4rem;
+      border-bottom: 1px solid var(--bordure);
+    }
+
+    /* Le petit titre de section (ex: "002 — PROJETS") */
+    .section-label {
+      font-size: 0.65rem;
+      font-weight: 300;
+      letter-spacing: 0.35em;
+      color: var(--accent);
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+
+    /* Le grand titre de section */
+    .section-title {
+      font-family: var(--font-titre);
+      font-size: clamp(3rem, 7vw, 8rem);
+      line-height: 0.9;
+      margin-bottom: 5rem;
+      color: var(--blanc);
+    }
+
+    /* ========== SECTION PROJETS ========== */
+    /* 
+      La grille projets : 2 colonnes égales.
+      On force exactement 2 colonnes avec "1fr 1fr"
+      (1fr = 1 fraction de l'espace disponible, donc moitié/moitié)
+    */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+    }
+
+    .project-card {
+      background: var(--noir2);
+      border: 1px solid var(--bordure);
+      overflow: hidden;               /* cache ce qui dépasse (image au survol) */
+      transition: border-color 0.4s;
+      cursor: pointer;
+    }
+
+    .project-card:hover {
+      border-color: var(--accent);
+    }
+
+    /* ========== SLIDER D'IMAGES ========== */
+    /*
+      .slider = le "cadre" du slider.
+      overflow: hidden → cache tout ce qui dépasse du cadre.
+      C'est ce qui crée l'effet slider : les images sont côte à côte,
+      et on déplace la piste pour n'en montrer qu'une à la fois.
+    */
+    .slider {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      overflow: hidden;
+      position: relative;
+      background: #1a1a1a;
+    }
+
+    /*
+      .slider-track = la "piste" qui contient TOUTES les images côte à côte.
+      display: flex → les images se placent en ligne horizontale.
+      transition: transform 0.5s ease → quand on déplace la piste (avec JS),
+      ça se fait avec une animation fluide de 0.5 secondes.
+    */
+    .slider-track {
+      display: flex;
+      height: 100%;
+      transition: transform 0.5s ease;
+      /* transform: translateX(...) sera appliqué via JavaScript */
+    }
+
+    /*
+      Chaque image dans le slider :
+      - flex-shrink: 0 → l'image NE RÉTRÉCIT PAS (elle garde sa taille)
+      - width: 100% → prend toute la largeur du cadre
+      Résultat : toutes les images font 100% de large, placées côte à côte
+    */
+    .slider-track img {
+      flex-shrink: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      filter: grayscale(20%);
+      transition: filter 0.4s;
+    }
+
+    .project-card:hover .slider-track img {
+      filter: grayscale(0%);
+    }
+
+    /* ---- Boutons précédent / suivant ---- */
+    /*
+      position: absolute → positionné PAR RAPPORT au .slider (qui a position: relative)
+      top: 50% + transform: translateY(-50%) → centré verticalement
+      z-index: 10 → au-dessus des images
+    */
+    .slider-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 10;
+      background: rgba(8,8,8,0.7);
+      color: var(--accent);
+      border: 1px solid var(--accent);
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      /* On supprime le style par défaut des boutons HTML */
+      outline: none;
+      user-select: none;
+      opacity: 0;                      /* invisible par défaut */
+    }
+
+    /* Les boutons apparaissent uniquement quand on survole la carte */
+    .project-card:hover .slider-btn {
+      opacity: 1;
+    }
+
+    .slider-btn:hover {
+      background: var(--accent);
+      color: var(--noir);
+    }
+
+    /* Bouton gauche (précédent) */
+    .slider-btn.prev { left: 0.75rem; }
+    /* Bouton droit (suivant) */
+    .slider-btn.next { right: 0.75rem; }
+
+    /* ---- Points de navigation (indicateurs) ---- */
+    /*
+      Les petits ronds en bas du slider qui indiquent sur quelle image on est.
+      position: absolute → collés en bas au centre du slider.
+    */
+    .slider-dots {
+      position: absolute;
+      bottom: 0.75rem;
+      left: 50%;
+      transform: translateX(-50%);   /* centré horizontalement */
+      display: flex;
+      gap: 6px;
+      z-index: 10;
+    }
+
+    .dot {
+      width: 6px;
+      height: 6px;
+      background: rgba(240,237,232,0.3);
+      border: none;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.3s;
+      outline: none;
+      padding: 0;
+    }
+
+    /* Le point actif (image actuellement affichée) est jaune et plus grand */
+    .dot.active {
+      background: var(--accent);
+      transform: scale(1.3);
+    }
+
+    /* La partie texte sous l'image */
+    .project-info {
+      padding: 1.5rem 2rem 2rem;
+      border-top: 1px solid var(--bordure);
+    }
+
+    .project-tech {
+      font-size: 0.6rem;
+      letter-spacing: 0.3em;
+      color: var(--accent);
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+
+    .project-name {
+      font-family: var(--font-titre);
+      font-size: 1.8rem;
+      color: var(--blanc);
+      margin-bottom: 0.75rem;
+      letter-spacing: 0.02em;
+    }
+
+    .project-desc {
+      font-size: 0.82rem;
+      font-weight: 200;
+      color: var(--gris);
+      line-height: 1.8;
+      margin-bottom: 1.5rem;
+    }
+
+    .project-link {
+      font-size: 0.65rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--blanc);
+      text-decoration: none;
+      border-bottom: 1px solid var(--gris);
+      padding-bottom: 2px;
+      transition: all 0.3s;
+    }
+
+    .project-link:hover {
+      color: var(--accent);
+      border-color: var(--accent);
+    }
+
+    /* ========== SECTION À PROPOS ========== */
+    .about-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;  /* 2 colonnes égales */
+      gap: 6rem;
+      align-items: start;
+    }
+
+    .about-text p {
+      font-size: 1rem;
+      font-weight: 200;
+      color: var(--gris);
+      line-height: 2;
+      margin-bottom: 1.5rem;
+    }
+
+    /* Le mot mis en valeur dans le texte */
+    .about-text strong {
+      color: var(--blanc);
+      font-weight: 400;
+    }
+
+    .skills-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    /* Chaque compétence = une ligne avec nom + niveau */
+    .skill-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.2rem 0;
+      border-bottom: 1px solid var(--bordure);
+      transition: padding-left 0.3s;
+    }
+
+    .skill-item:hover {
+      padding-left: 0.5rem;            /* décalage subtil au survol */
+    }
+
+    .skill-name {
+      font-size: 0.85rem;
+      font-weight: 300;
+      letter-spacing: 0.1em;
+    }
+
+    /* La barre de niveau de compétence */
+    .skill-bar {
+      width: 120px;
+      height: 1px;
+      background: var(--bordure);
+      position: relative;
+    }
+
+    /* Le remplissage jaune de la barre (largeur = niveau) */
+    .skill-bar::after {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      background: var(--accent);
+      /* La largeur est définie individuellement via style="--w: XX%" */
+      width: var(--w, 50%);
+    }
+
+    /* ========== SECTION CONTACT ========== */
+    #contact {
+      min-height: 60vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .contact-headline {
+      font-family: var(--font-titre);
+      font-size: clamp(3rem, 8vw, 10rem);
+      line-height: 0.85;
+      margin-bottom: 3rem;
+    }
+
+    /* Le "." en accent jaune dans le titre contact */
+    .contact-headline span {
+      color: var(--accent);
+    }
+
+    .contact-links {
+      display: flex;
+      gap: 3rem;
+      flex-wrap: wrap;                 /* passe à la ligne si pas assez de place */
+    }
+
+    .contact-link {
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+      text-decoration: none;
+      transition: transform 0.3s;
+    }
+
+    .contact-link:hover {
+      transform: translateY(-4px);     /* monte légèrement au survol */
+    }
+
+    .contact-link-label {
+      font-size: 0.6rem;
+      letter-spacing: 0.3em;
+      color: var(--gris);
+      text-transform: uppercase;
+    }
+
+    .contact-link-value {
+      font-size: 1rem;
+      font-weight: 300;
+      color: var(--blanc);
+    }
+
+    /* ========== FOOTER ========== */
+    footer {
+      padding: 2rem 4rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    footer p {
+      font-size: 0.65rem;
+      color: var(--gris);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+
+    /* ========== RESPONSIVE (adaptation mobile) ========== */
+    /* 
+      @media = règle qui s'applique SEULEMENT si la condition est vraie
+      max-width: 768px = seulement sur les écrans de moins de 768px (mobile/tablette)
+    */
+    @media (max-width: 768px) {
+      nav { padding: 1.2rem 1.5rem; }
+      section { padding: 5rem 1.5rem; }
+      #hero { padding: 0 1.5rem 4rem; }
+      .about-layout { grid-template-columns: 1fr; gap: 3rem; }
+      .projects-grid { grid-template-columns: 1fr; } /* 1 colonne sur mobile */
+      .nav-links { display: none; }
+      footer { flex-direction: column; gap: 1rem; text-align: center; }
+    }
+
+    /* ========== ANIMATION D'ENTRÉE ========== */
+    /* 
+      @keyframes = définit une animation.
+      "fadeUp" fait monter l'élément de 30px tout en apparaissant.
+    */
+    @keyframes fadeUp {
+      from {
+        opacity: 0;              /* invisible au départ */
+        transform: translateY(30px);  /* décalé de 30px vers le bas */
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);     /* position normale */
+      }
+    }
+
+    /* On applique l'animation aux éléments du hero */
+    .hero-tag, .hero-title, .hero-subtitle, .hero-cta {
+      animation: fadeUp 0.9s ease forwards;
+      opacity: 0;                      /* invisible par défaut, l'animation l'affiche */
+    }
+
+    /* 
+      animation-delay = délai avant que l'animation commence.
+      Chaque élément apparaît un peu après le précédent → effet "cascade"
+    */
+    .hero-tag        { animation-delay: 0.1s; }
+    .hero-title      { animation-delay: 0.3s; }
+    .hero-subtitle   { animation-delay: 0.5s; }
+    .hero-cta        { animation-delay: 0.7s; }
+
+  </style>
+</head>
+
+<body>
+
+  <!-- ========== NAVIGATION ========== -->
+  <!-- 
+    <nav> = balise sémantique pour la navigation.
+    Les balises sémantiques expliquent CE QU'EST le contenu (nav, header, section, footer...)
+    C'est important pour le SEO et l'accessibilité.
+  -->
+  <nav>
+    <div class="nav-logo">DEV.</div>
+    <!-- 
+      <ul> = liste non ordonnée
+      <li> = élément de liste (list item)
+      <a href="#section"> = lien vers un ancre sur la même page
+    -->
+    <ul class="nav-links">
+      <li><a href="#hero">Home</a></li>
+      <li><a href="#projects">Works</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- ========== HERO / ACCUEIL ========== -->
+  <!-- 
+    id="hero" = identifiant unique de la section.
+    Le lien <a href="#hero"> cible cet id pour le scroll.
+  -->
+  <section id="hero">
+    <!-- Texte décoratif en arrière-plan -->
+    <div class="hero-bg-text" aria-hidden="true">DEV</div>
+    <!-- 
+      aria-hidden="true" = cache cet élément aux lecteurs d'écran
+      (les malvoyants n'ont pas besoin d'entendre "DEV" en arrière-plan)
+    -->
+
+    <p class="hero-tag">001 — Développeur Web</p>
+
+    <h1 class="hero-title">
+      Milan<br>
+      Gaspard<span>.</span>
+    </h1>
+    <!-- 
+      <h1> = titre de niveau 1. Il ne doit y en avoir qu'UN par page.
+      C'est le titre le plus important, pour le SEO et l'accessibilité.
+      <br> = saut de ligne
+    -->
+
+    <p class="hero-subtitle">
+      développeur web depuis Septembre 2025, je suis apprenant a l'Ifapme de Charleroi
+    </p>
+
+    <a href="#projects" class="hero-cta">Voir mes projets</a>
+    <!-- 
+      <a href="#projects"> = lien cliquable qui fait défiler jusqu'à #projects
+    -->
+  </section>
+
+  <!-- ========== PROJETS ========== -->
+  <section id="projects">
+    <p class="section-label">002 — Travaux</p>
+    <h2 class="section-title">WORKS</h2>
+    <!-- <h2> = titre de niveau 2, les sous-titres principaux -->
+
+    <div class="projects-grid">
+
+      <!-- ======== PROJET 1 ======== -->
+      <div class="project-card">
+
+        <!-- 
+          .slider = le cadre qui affiche UNE image à la fois.
+          data-index="0" = attribut personnalisé qui stocke l'index
+          de l'image actuellement affichée (commence à 0).
+          Le JavaScript va lire et modifier cette valeur.
+        -->
+        <div class="slider" data-index="0">
+
+          <!-- 
+            .slider-track = la piste qui contient TOUTES les images côte à côte.
+            Quand on clique "suivant", le JS déplace cette piste vers la gauche
+            pour faire apparaître l'image suivante.
+          -->
+          <div class="slider-track">
+            <!-- Remplace ces src="..." par tes vraies captures d'écran -->
+            <img src="./image/Capture d'écran 2026-02-28 141741.png" alt="Projet 1 vue 1">
+            <img src="./image/Capture d'écran 2026-02-28 160033.png" alt="Projet 1 vue 2">
+            <img src="./image/Capture d'écran 2026-02-28 160126.png" alt="Projet 1 vue 3">
+          </div>
+
+          <!-- 
+            Les boutons ← → pour naviguer entre les images.
+            onclick="moveSlider(this, -1)" = quand on clique,
+            appelle la fonction JS "moveSlider" avec :
+            - this = ce bouton (pour retrouver le slider parent)
+            - -1 = aller à l'image PRÉCÉDENTE (-1) ou SUIVANTE (+1)
+          -->
+          <button class="slider-btn prev" onclick="moveSlider(this, -1)">&#8592;</button>
+          <button class="slider-btn next" onclick="moveSlider(this, +1)">&#8594;</button>
+
+          <!-- 
+            Les petits points en bas.
+            data-slide="0/1/2" = indique à quelle image ce point correspond.
+            onclick="goToSlide(this, 0/1/2)" = va directement à cette image.
+          -->
+          <div class="slider-dots">
+            <button class="dot active" data-slide="0" onclick="goToSlide(this, 0)"></button>
+            <button class="dot"        data-slide="1" onclick="goToSlide(this, 1)"></button>
+            <button class="dot"        data-slide="2" onclick="goToSlide(this, 2)"></button>
+          </div>
+
+        </div><!-- fin .slider -->
+
+        <div class="project-info">
+          <p class="project-tech">HTML - CSS - JAVASCRIPT - PHP - MySQL</p>
+          <h3 class="project-name">Disk Air</h3>
+          <p class="project-desc">
+           Site vitrine de vinyles, projet fait pour apprendre a utiliser PHP et MySQL, avec un système de connexion, d'ajout de produits et de panier.
+          </p>
+          <a href="#" class="project-link"></a>
+        </div>
+      </div>
+
+      <!-- ======== PROJET 2 ======== -->
+      <div class="project-card">
+
+        <div class="slider" data-index="0">
+          <div class="slider-track">
+            <img src="./image/Capture d'écran 2026-02-28 162102.png" alt="Projet 2 vue 1">
+            <img src="./image/Capture d'écran 2026-02-28 162125.png" alt="Projet 2 vue 2">
+          </div>
+          <button class="slider-btn prev" onclick="moveSlider(this, -1)">&#8592;</button>
+          <button class="slider-btn next" onclick="moveSlider(this, +1)">&#8594;</button>
+          <div class="slider-dots">
+            <button class="dot active" data-slide="0" onclick="goToSlide(this, 0)"></button>
+            <button class="dot"        data-slide="1" onclick="goToSlide(this, 1)"></button>
+          
+          </div>
+        </div>
+
+        <div class="project-info">
+          <p class="project-tech">HTML - CSS - JAVASCRIPT</p>
+          <h3 class="project-name">ATAL Site français</h3>
+          <p class="project-desc">
+            Site d'immobilier fait pour une connaissance qui a des contrats en pologne et qui voulait un site en français pour ses clients francophones.
+          </p>
+          <a href="#" class="project-link"></a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========== À PROPOS ========== -->
+  <section id="about">
+    <p class="section-label">003 — Qui suis-je</p>
+    <h2 class="section-title">ABOUT</h2>
+
+    <div class="about-layout">
+
+      <!-- Colonne gauche : texte biographique -->
+      <div class="about-text">
+        <p>
+          Je suis un <strong>développeur web</strong> je suit en recherche de stage
+          en alternance pour mettre en pratique mes compétences et apprendre auprès de professionnels du secteur.
+        </p>
+        <p>
+          je me suis interessé au dévelopemment en 2024 dans mon école et j'ai unpeu un petit peu le python 
+          mais c'est quand je me suis inscrit en ifapme poura pprendre le dev web j'ai directement accroché 
+        </p>
+      </div>
+
+      <!-- Colonne droite : liste de compétences avec barres de niveau -->
+      <div class="skills-list">
+        <!-- 
+          style="--w: 90%" = on passe une variable CSS directement depuis le HTML.
+          Le CSS l'utilise pour définir la largeur de la barre de compétence.
+        -->
+        <div class="skill-item">
+          <span class="skill-name">HTML</span>
+          <div class="skill-bar" style="--w: 90%"></div>
+        </div>
+        <div class="skill-item">
+          <span class="skill-name">CSS</span>
+          <div class="skill-bar" style="--w: 85%"></div>
+        </div>
+        <div class="skill-item">
+          <span class="skill-name">JavaScript</span>
+          <div class="skill-bar" style="--w: 20%"></div>
+        </div>
+        <div class="skill-item">
+          <span class="skill-name">PHP</span>
+          <div class="skill-bar" style="--w: 10%"></div>
+        </div>
+        <div class="skill-item">
+          <span class="skill-name">MySQL</span>
+          <div class="skill-bar" style="--w: 10%"></div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========== CONTACT ========== -->
+  <section id="contact">
+    <p class="section-label">004 — contact</p>
+
+    <h2 class="contact-headline">
+      ME<br>
+      CONTACTER<span>.</span>
+    </h2>
+
+    <div class="contact-links">
+      <!-- Chaque lien de contact : label discret + valeur en grand -->
+      <a href="mailto:milangaspard1302@gmail.com" class="contact-link">
+        <span class="contact-link-label">Email</span>
+        <span class="contact-link-value"><span class="__cf_email__" data-cfemail="394d5657795c54585055175a5654">milangaspard1302@gmail.com</span></span>
+      </a>
+      <a href="https://github.com/Gaspami" class="contact-link" target="_blank">
+        <!-- target="_blank" = ouvre le lien dans un nouvel onglet -->
+        <span class="contact-link-label">GitHub</span>
+        <span class="contact-link-value">github.com/Gaspami</span>
+      </a>
+      <a href="https://instagram.com/gaspami" class="contact-link" target="_blank">
+        <span class="contact-link-label">Instagram</span>
+        <span class="contact-link-value">instagram.com/gaspami</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- ========== FOOTER ========== -->
+  <!-- 
+    <footer> = pied de page. Balise sémantique.
+    Toujours en bas du site.
+  -->
+ 
+  <footer>
+    <p> 2026 — Milan Gaspard</p>
+  </footer>
+
+  <script>
+    /*
+      ==========================================
+      JAVASCRIPT — Le cerveau du slider
+      ==========================================
+      JS est le seul des 3 langages (HTML/CSS/JS) qui peut :
+      - Réagir aux clics de l'utilisateur
+      - Modifier le contenu et le style de la page EN DIRECT
+      - Faire des calculs et mémoriser des valeurs
+      ==========================================
+    */
+
+    /*
+      FONCTION moveSlider(btn, direction)
+      Appelée quand on clique sur ← ou →.
+      btn       = le bouton qui a été cliqué
+      direction = -1 (précédent) ou +1 (suivant)
+    */
+    function moveSlider(btn, direction) {
+      // btn.closest('.slider') = remonte dans le HTML depuis le bouton
+      // jusqu'à trouver le parent avec la classe .slider
+      const slider = btn.closest('.slider');
+
+      // Nombre total d'images dans ce slider
+      const total = slider.querySelectorAll('img').length;
+
+      // parseInt = convertit le texte "0" en nombre 0
+      let current = parseInt(slider.dataset.index);
+
+      /*
+        Calcul du nouvel index avec le modulo (%) :
+        (2 + 1) % 3 = 0  → après la dernière, on revient à la 1ère
+        (0 - 1 + 3) % 3 = 2 → avant la 1ère, on va à la dernière
+        Le "+ total" empêche d'avoir un nombre négatif
+      */
+      let newIndex = (current + direction + total) % total;
+
+      showSlide(slider, newIndex);
+    }
+
+    /*
+      FONCTION goToSlide(dot, index)
+      Appelée quand on clique sur un point ●
+      Va directement à l'image correspondante
+    */
+    function goToSlide(dot, index) {
+      const slider = dot.closest('.slider');
+      showSlide(slider, index);
+    }
+
+    /*
+      FONCTION showSlide(slider, index)
+      Fait vraiment le travail :
+        1. Déplace la piste d'images (translateX)
+        2. Met à jour le point actif (jaune)
+        3. Mémorise l'index actuel
+    */
+    function showSlide(slider, index) {
+      const track = slider.querySelector('.slider-track');
+
+      /*
+        translateX(-X%) = décale la piste vers la gauche.
+        index 0 → translateX(0%)    = 1ère image
+        index 1 → translateX(-100%) = 2ème image
+        index 2 → translateX(-200%) = 3ème image
+        Les backticks ` ` permettent d'insérer ${index} dans le texte.
+      */
+      track.style.transform = `translateX(-${index * 100}%)`;
+
+      // Mémorise l'index pour la prochaine navigation
+      slider.dataset.index = index;
+
+      // Met à jour les points : le point actif devient jaune
+      const dots = slider.querySelectorAll('.dot');
+      /*
+        forEach = boucle sur chaque point
+        classList.toggle('active', condition) :
+          ajoute 'active' si vrai, enlève si faux
+      */
+      dots.forEach((dot, i) => {
+        dot.classList.toggle('active', i === index);
+      });
+    }
+  </script>
+
+</body>
+</html>
