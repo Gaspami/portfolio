@@ -1,33 +1,16 @@
 <!DOCTYPE html>
-<!-- 
-  DOCTYPE html = dit au navigateur "ce fichier est une page web moderne"
--->
 <html lang="fr">
-<!-- 
-  <html> = la balise racine, tout le site est à l'intérieur
-  lang="fr" = indique que la langue est le français (utile pour l'accessibilité)
--->
+
 
 <head>
-  <!-- 
-    <head> = la "tête" invisible de la page.
-    Elle contient des infos POUR le navigateur, pas pour l'utilisateur.
-  -->
-
   <meta charset="UTF-8">
-  <!-- charset="UTF-8" = permet d'afficher les accents (é, è, à...) -->
-
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- viewport = rend le site responsive (adapté aux mobiles) -->
 
-  <title>Portfolio — Dev</title>
-  <!-- Le texte qui apparaît dans l'onglet du navigateur -->
 
-  <!-- 
-    Google Fonts = on importe 2 polices depuis internet :
-    - "Bebas Neue" → police TRÈS ÉPAISSE pour les grands titres
-    - "DM Sans" → police fine et élégante pour le texte normal
-  -->
+<title>Portfolio — Dev</title>
+
+
+ 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@200;300;400&display=swap" rel="stylesheet">
@@ -35,11 +18,7 @@
   <style>
     
 
-    /* 
-      :root = les "variables globales" du site.
-      On définit les couleurs ici pour pouvoir les réutiliser partout.
-      Si on veut changer une couleur, on la change UNE SEULE FOIS ici.
-    */
+    
     :root {
       --noir: #080808;        /* fond principal ultra sombre */
       --noir2: #323232;       /* fond des cartes, légèrement moins sombre */
@@ -48,105 +27,83 @@
       --gris: #a5a5a5;        /* gris pour le texte secondaire */
       --bordure: #222222;     /* couleur des bordures */
 
-      --font-titre: 'Bebas Neue', sans-serif;   /* police grasse pour les titres */
-      --font-texte: 'DM Sans', sans-serif;       /* police fine pour le texte */
+      --font-titre: 'Bebas Neue', sans-serif;  
+      --font-texte: 'DM Sans', sans-serif;      
     }
 
-    /* 
-      * = sélectionne TOUS les éléments de la page.
-      box-sizing: border-box → simplifie le calcul des tailles
-      margin/padding: 0 → supprime les espacements par défaut du navigateur
-    */
+   
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
     }
 
-    /* 
-      html { scroll-behavior: smooth } = quand on clique sur un lien (#contact etc.),
-      la page défile doucement au lieu de sauter brutalement
-    */
+    
     html {
       scroll-behavior: smooth;
     }
 
-    /* 
-      body = le corps entier de la page.
-      On applique ici la couleur de fond, la police par défaut, la couleur du texte.
-    */
+   
     body {
-      background-color: var(--noir);   /* fond noir */
-      color: var(--blanc);              /* texte blanc cassé */
-      font-family: var(--font-texte);   /* police fine par défaut */
-      font-weight: 300;                 /* épaisseur fine (300 = light) */
-      overflow-x: hidden;              /* empêche le scroll horizontal involontaire */
-      cursor: crosshair;               /* curseur en croix pour le style */
+      background-color: var(--noir);   
+      color: var(--blanc);              
+      font-family: var(--font-texte);   
+      font-weight: 300;         
+      overflow-x: hidden;              
+      cursor: crosshair;               
     }
 
-    /* ========== BARRE DE NAVIGATION ========== */
+    /*  BARRE DE NAVIGATION  */
     nav {
-      /* 
-        position: fixed = la nav reste EN HAUT même quand on scrolle
-        top/left/right: 0 = collée aux bords
-        z-index: 100 = au-dessus de tout le reste (z-index = "couche")
-      */
       position: fixed;
       top: 0;
       left: 0;
       right: 0;
       z-index: 100;
-      display: flex;                    /* aligne les éléments en ligne */
-      justify-content: space-between;  /* logo à gauche, liens à droite */
-      align-items: center;             /* centré verticalement */
+      display: flex;                    
+      justify-content: space-between;  
+      align-items: center;           
       padding: 1.5rem 4rem;
       border-bottom: 1px solid var(--bordure);
-      background: rgba(8, 8, 8, 0.92); /* fond semi-transparent */
-      backdrop-filter: blur(12px);     /* flou derrière la nav (effet verre) */
+      background: rgba(8, 8, 8, 0.92); 
+      backdrop-filter: blur(12px);     
     }
 
     .nav-logo {
-      font-family: var(--font-titre);  /* police grasse pour le logo */
+      font-family: var(--font-titre);  
       font-size: 1.4rem;
-      letter-spacing: 0.1em;          /* espace entre les lettres */
+      letter-spacing: 0.1em;       
       color: var(--accent);
     }
 
     .nav-links {
-      /* 
-        display: flex = aligne les liens en ligne
-        list-style: none = supprime les puces de liste
-      */
+     
       display: flex;
       list-style: none;
-      gap: 2.5rem;                     /* espace entre chaque lien */
+      gap: 2.5rem;                     
     }
 
     .nav-links a {
       color: var(--gris);
-      text-decoration: none;           /* supprime le soulignement */
+      text-decoration: none;         
       font-size: 0.75rem;
       font-weight: 300;
       letter-spacing: 0.2em;
-      text-transform: uppercase;       /* met en MAJUSCULES automatiquement */
-      transition: color 0.3s;          /* la couleur change en 0.3 secondes au survol */
+      text-transform: uppercase; 
+      transition: color 0.3s;        
     }
 
     .nav-links a:hover {
-      /* :hover = style appliqué quand la souris passe dessus */
+      
       color: var(--accent);
     }
 
-    /* ========== SECTION HERO (accueil) ========== */
+    /*SECTION HERO */
     #hero {
-      /* 
-        min-height: 100vh = la section fait AU MOINS toute la hauteur de l'écran
-        100vh = 100% de la hauteur visible (vh = viewport height)
-      */
       min-height: 100vh;
       display: flex;
-      flex-direction: column;          /* empile les éléments verticalement */
-      justify-content: flex-end;       /* pousse le contenu en bas */
+      flex-direction: column;          
+      justify-content: flex-end;       
       padding: 0 4rem 5rem;
       position: relative;
       border-bottom: 1px solid var(--bordure);
